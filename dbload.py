@@ -13,5 +13,6 @@ vectorstore = Chroma(
     embedding_function=embeddings.OllamaEmbeddings(model='nomic-embed-text')
 )
 vectorstore.as_retriever()
+vectorstore.aadd_texts
 
 print('Vectorstore', len(vectorstore))
