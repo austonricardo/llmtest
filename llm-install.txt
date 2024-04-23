@@ -1,0 +1,71 @@
+pip install langchain langchain-community langchain-core
+pip install tiktoken
+pip install chromadb
+
+#install ollama from https://ollama.com/download
+ollama pull nomic-embed-text
+ollama pull mistral
+
+
+#visual
+pip install gradio
+
+#load from directory
+pip install unstructured
+
+
+----------
+#convert from safetensor to ggf packing
+git lfs install
+
+git clone https://huggingface.co/rhaymison/Mistral-portuguese-luana-7b mistralptbr
+
+cd mistralptbr
+
+docker run --rm -v .:/model ollama/quantize -q q4_K_M /model
+
+this will give u a f16.bin and q4_K_M.bin  
+
+mv q4_K_M.bin mistral-portuguese-luana-7b.gguf
+mv mistral-portuguese-luana-7b.gguf mistral-portuguese-luana-7b.Q4_K_M.gguf
+
+use the file q4_K_M.bin how gguf file
+
+create a ModelFile with the content
+FROM "../mistral-portuguese-luana-7b.Q4_K_M.gguf"
+PARAMETER stop "<|im_start|>"
+PARAMETER stop "<|im_end|>"
+TEMPLATE """
+<|im_start|>system
+{{ .System }}<|im_end|>
+<|im_start|>user
+{{ .Prompt }}<|im_end|>
+<|im_start|>assistant 
+"""
+
+ollama create mistralptbr -f ModelFile
+
+#for test
+ollama list
+ollama run mistralptbr
+
+
+
+https://www.trt6.jus.br/portal/ https://www.trt6.jus.br/portal/institucional/composicao https://www.trt6.jus.br/portal/institucional/varas-do-trabalho-de-pernambuco https://www.trt6.jus.br/portal/institucional/regimento-interno
+
+https://www.trt6.jus.br/portal/institucional/composicao
+Quem é o presidente do tribunal regional do trabalho da 6a região?
+
+
+
+import nltk
+import ssl
+
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+nltk.download('averaged_perceptron_tagger')
